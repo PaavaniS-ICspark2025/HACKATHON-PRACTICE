@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Aquatic Notes</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Aquatic Notes</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="notes.html">My Notes</a>
+            <a href="about.html">About</a>
+            <a href="priorities.html">Priorities</a>
+            <a href="contact.html">Contact</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Help</a>
+                <div class="dropdown-content">
+                    <a href="settings.html">Settings</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Settings</h2>
+            <p>Customize your experience with Aquatic Notes.</p>
+            
+            <h3>Theme</h3>
+            <form id="theme-form">
+                <label>
+                    <input type="radio" name="theme" value="blue" checked>
+                    Blue (Aquatic)
+                </label><br>
+                <label>
+                    <input type="radio" name="theme" value="pink">
+                    Pink (Pastel)
+                </label><br>
+                <label>
+                    <input type="radio" name="theme" value="green">
+                    Green (Nature)
+                </label><br>
+                <label>
+                    <input type="radio" name="theme" value="dark">
+                    Dark Mode
+                </label><br>
+                <button type="submit">Apply Theme</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 Aquatic Notes</p>
+    </footer>
+    <script src="settings.js"></script>
+</body>
+</html>
