@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Notes</title>
+    <title>Wordle - Work Notes</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="main.js" defer></script>
+    <script src="wordle.js" defer></script>
 </head>
 <body>
     <header>
-        <h1>My Notes</h1>
+        <h1>Wordle</h1>
         <nav>
             <a href="index.html">Home</a>
             <a href="notes.html">My Notes</a>
@@ -38,31 +40,27 @@
             </div>
         </nav>
     </header>
-    <section id="quick-note">
-        <h2>Quick Note</h2>
-        <textarea id="quick-text" rows="4" placeholder="Type something..."></textarea>
-        <p><small>Your quick note is saved automatically in your browser.</small></p>
-    </section>
+
     <main>
-        <section id="note-form">
-            <h2>Add a new note</h2>
-            <form id="new-note">
-                <label for="title">Title:</label>
-                <input type="text" id="title" required>
-                <label for="content">Content:</label>
-                <textarea id="content" rows="4" required></textarea>
-                <button type="submit">Save</button>
+        <section id="wordle-game">
+            <h2>Wordle</h2>
+            <p>Guess the secret 5-letter word in 6 tries. Only real 5-letter words are accepted.</p>
+
+            <form id="wordle-form" autocomplete="off">
+                <label for="wordle-guess">Enter a 5-letter word</label>
+                <input id="wordle-guess" name="guess" type="text" maxlength="5" pattern="[A-Za-z]{5}" required>
+                <button type="submit">Guess</button>
+                <button type="button" id="wordle-hint">Hint</button>
+                <button type="button" id="wordle-reset">New Game</button>
             </form>
-        </section>
-        <section id="note-list">
-            <h2>Your notes</h2>
-            <ul id="notes"></ul>
+
+            <p id="wordle-status" aria-live="polite"></p>
+            <div id="wordle-board" aria-label="Wordle board"></div>
         </section>
     </main>
+
     <footer>
         <p>&copy; 2026 Work Notes</p>
     </footer>
-    <script src="notes.js"></script>
-    <script src="main.js" defer></script>
 </body>
 </html>

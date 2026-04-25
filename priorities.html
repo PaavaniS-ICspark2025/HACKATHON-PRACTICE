@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Priorities - Notes Organizer</title>
+    <title>Priorities - Work Notes</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <script src="priorities.js" defer></script>
@@ -15,9 +15,30 @@
         <nav>
             <a href="index.html">Home</a>
             <a href="notes.html">My Notes</a>
-            <a href="priorities.html">Priorities</a>
-            <a href="about.html">About</a>
-            <a href="contact.html">Contact</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">More Features</a>
+                <div class="dropdown-content">
+                    <a href="wordle.html">Wordle</a>
+                    <a href="sudoku.html">Sudoku</a>
+                    <a href="songs.html">Songs</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Work</a>
+                <div class="dropdown-content">
+                    <a href="calendar.html">Calendar</a>
+                    <a href="priorities.html">Priorities</a>
+                    <a href="contact.html">Contacts</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Help</a>
+                <div class="dropdown-content">
+                    <a href="about.html">About</a>
+                    <a href="settings.html">Settings</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
         </nav>
     </header>
     <section id="quick-note">
@@ -31,15 +52,18 @@
             <form id="new-priority">
                 <label for="priority-text">Priority:</label>
                 <input type="text" id="priority-text" required>
+                <label for="priority-description">Description:</label>
+                <textarea id="priority-description" rows="3" placeholder="Add details for this priority..."></textarea>
                 <label for="importance">Importance:</label>
                 <select id="importance" required>
                     <option value="high" style="background-color:#FF6B6B;">High (red)</option>
                     <option value="medium" style="background-color:#FFD1DC;">Medium (light pink)</option>
                     <option value="low" style="background-color:#FFF9C4;">Low (yellow)</option>
                 </select>
-                <label for="time-estimate">Time (hours):</label>
-                <input type="number" id="time-estimate" min="0" step="0.5" required>
+                <label for="finish-by">Date and time to finish:</label>
+                <input type="datetime-local" id="finish-by" required>
                 <button type="submit">Add</button>
+                <button type="button" id="test-alarm-btn">Test Alarm Sound</button>
             </form>
         </section>
         <section id="priority-list">
@@ -48,11 +72,11 @@
         </section>
         <section id="priority-chart">
             <h2>Priorities Chart</h2>
-            <canvas id="chartCanvas" width="400" height="200"></canvas>
+            <canvas id="chartCanvas" aria-label="Priority chart"></canvas>
         </section>
     </main>
     <footer>
-        <p>&copy; 2026 Notes Organizer</p>
+        <p>&copy; 2026 Work Notes</p>
     </footer>
 </body>
 </html>

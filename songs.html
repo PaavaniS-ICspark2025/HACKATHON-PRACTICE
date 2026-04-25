@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Songs - Work Notes</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="main.js" defer></script>
+    <script src="songs.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Songs</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="notes.html">My Notes</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">More Features</a>
+                <div class="dropdown-content">
+                    <a href="wordle.html">Wordle</a>
+                    <a href="sudoku.html">Sudoku</a>
+                    <a href="songs.html">Songs</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Work</a>
+                <div class="dropdown-content">
+                    <a href="calendar.html">Calendar</a>
+                    <a href="priorities.html">Priorities</a>
+                    <a href="contact.html">Contacts</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Help</a>
+                <div class="dropdown-content">
+                    <a href="about.html">About</a>
+                    <a href="settings.html">Settings</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="songs-player">
+            <h2>Epic: The Musical Songs</h2>
+            <p>Choose a song and press play in the player below.</p>
+
+            <h3>Find Any Song</h3>
+            <form id="song-search-form">
+                <label for="song-search-title">Song Title</label>
+                <input id="song-search-title" type="text" placeholder="e.g. Blinding Lights" required>
+                <label for="song-search-artist">Artist</label>
+                <input id="song-search-artist" type="text" placeholder="e.g. The Weeknd" required>
+                <button type="submit">Find and Play</button>
+            </form>
+            <p id="song-search-status" aria-live="polite"></p>
+
+            <label for="song-select">Select a song</label>
+            <select id="song-select" aria-label="Select an Epic the Musical song"></select>
+            <button type="button" id="play-across-tabs">Keep Playing Across Tabs</button>
+            <h3 id="song-title">Now playing: The Horse and the Infant</h3>
+            <p><a id="song-link" href="https://www.youtube.com/watch?v=bWIgy-Ls-SU" target="_blank" rel="noopener noreferrer">Open this song on YouTube</a></p>
+            <div class="video-embed" id="songs-video-embed">
+                <iframe
+                    id="song-frame"
+                    src="https://www.youtube.com/embed/bWIgy-Ls-SU"
+                    title="Epic The Musical song player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div id="songs-audio-wrap" style="display: none;">
+                <audio id="song-audio" controls preload="none" style="width: 100%; margin-top: 0.65rem;"></audio>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

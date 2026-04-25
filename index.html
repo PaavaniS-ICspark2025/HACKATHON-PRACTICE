@@ -3,19 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes Organizer</title>
+    <title>Work Notes</title>
     <link rel="stylesheet" href="styles.css">
     <script src="main.js" defer></script>
 </head>
 <body>
     <header>
-        <h1>Notes Organizer</h1>
+        <h1>The convenient app</h1>
+        <h3>Not only for note taking</h3>
         <nav>
             <a href="index.html">Home</a>
             <a href="notes.html">My Notes</a>
-            <a href="about.html">About</a>
-            <a href="priorities.html">Priorities</a>
-            <a href="contact.html">Contact</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">More Features</a>
+                <div class="dropdown-content">
+                    <a href="wordle.html">Wordle</a>
+                    <a href="sudoku.html">Sudoku</a>
+                    <a href="songs.html">Songs</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Work</a>
+                <div class="dropdown-content">
+                    <a href="calendar.html">Calendar</a>
+                    <a href="priorities.html">Priorities</a>
+                    <a href="contact.html">Contacts</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Help</a>
+                <div class="dropdown-content">
+                    <a href="about.html">About</a>
+                    <a href="settings.html">Settings</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
         </nav>
     </header>
     <main>
@@ -29,9 +51,52 @@
             <textarea id="quick-text" rows="4" placeholder="Type something..."></textarea>
             <p><small>Your quick note is saved automatically in your browser.</small></p>
         </section>
+        <section id="timezone-viewer">
+            <h2>Time Zones</h2>
+            <p>Set your timezone and add others to compare current times.</p>
+
+            <form id="personal-timezone-form">
+                <label for="personal-timezone">Your time zone:</label>
+                <input type="text" id="personal-timezone" list="timezone-options" placeholder="Example: America/New_York" required>
+                <button type="submit">Save My Time Zone</button>
+            </form>
+
+            <form id="add-timezone-form">
+                <label for="add-timezone">Add another time zone:</label>
+                <input type="text" id="add-timezone" list="timezone-options" placeholder="Example: Europe/London" required>
+                <button type="submit">Add Time Zone</button>
+            </form>
+
+            <datalist id="timezone-options">
+                <option value="UTC"></option>
+                <option value="America/New_York"></option>
+                <option value="America/Chicago"></option>
+                <option value="America/Denver"></option>
+                <option value="America/Los_Angeles"></option>
+                <option value="America/Toronto"></option>
+                <option value="America/Mexico_City"></option>
+                <option value="America/Sao_Paulo"></option>
+                <option value="Europe/London"></option>
+                <option value="Europe/Paris"></option>
+                <option value="Europe/Berlin"></option>
+                <option value="Europe/Madrid"></option>
+                <option value="Europe/Rome"></option>
+                <option value="Africa/Johannesburg"></option>
+                <option value="Asia/Dubai"></option>
+                <option value="Asia/Kolkata"></option>
+                <option value="Asia/Singapore"></option>
+                <option value="Asia/Tokyo"></option>
+                <option value="Asia/Seoul"></option>
+                <option value="Australia/Sydney"></option>
+                <option value="Pacific/Auckland"></option>
+            </datalist>
+
+            <p id="timezone-error" aria-live="polite"></p>
+            <ul id="timezone-list"></ul>
+        </section>
     </main>
     <footer>
-        <p>&copy; 2026 Notes Organizer</p>
+        <p>&copy; 2026 Work Notes</p>
     </footer>
 </body>
 </html>

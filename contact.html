@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - Notes Organizer</title>
+    <title>Contact - Work Notes</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,9 +12,30 @@
         <nav>
             <a href="index.html">Home</a>
             <a href="notes.html">My Notes</a>
-            <a href="about.html">About</a>
-            <a href="priorities.html">Priorities</a>
-            <a href="contact.html">Contact</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">More Features</a>
+                <div class="dropdown-content">
+                    <a href="wordle.html">Wordle</a>
+                    <a href="sudoku.html">Sudoku</a>
+                    <a href="songs.html">Songs</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Work</a>
+                <div class="dropdown-content">
+                    <a href="calendar.html">Calendar</a>
+                    <a href="priorities.html">Priorities</a>
+                    <a href="contact.html">Contacts</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Help</a>
+                <div class="dropdown-content">
+                    <a href="about.html">About</a>
+                    <a href="settings.html">Settings</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
         </nav>
     </header>
     <section id="quick-note">
@@ -23,14 +44,34 @@
         <p><small>Your quick note is saved automatically in your browser.</small></p>
     </section>
     <main>
-        <section>
-            <h2>Get in Touch</h2>
-            <p>If you have questions or feedback, reach out via email at <a href="mailto:info@notesorganizer.example">info@notesorganizer.example</a>.</p>
+        <section id="contact-form">
+            <h2>Save Your Contacts</h2>
+            <p>Add personal contacts and keep them saved in your browser.</p>
+            <form id="new-contact">
+                <label for="contact-name">Name:</label>
+                <input type="text" id="contact-name" required>
+
+                <label for="contact-email">Email:</label>
+                <input type="email" id="contact-email" placeholder="name@example.com">
+
+                <label for="contact-phone">Phone:</label>
+                <input type="tel" id="contact-phone" placeholder="(555) 123-4567">
+
+                <label for="contact-notes">Notes:</label>
+                <textarea id="contact-notes" rows="3" placeholder="Relationship, company, reminders..."></textarea>
+
+                <button type="submit">Save Contact</button>
+            </form>
+        </section>
+        <section id="contact-list">
+            <h2>Your Saved Contacts</h2>
+            <ul id="contacts"></ul>
         </section>
     </main>
     <footer>
-        <p>&copy; 2026 Notes Organizer</p>
+        <p>&copy; 2026 Work Notes</p>
     </footer>
+    <script src="contact.js" defer></script>
     <script src="main.js" defer></script>
 </body>
 </html>

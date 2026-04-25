@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('new-note');
     const notesList = document.getElementById('notes');
+    const profileId = sessionStorage.getItem('workNotesActiveProfileId') || 'default';
+    const notesKey = `notes::${profileId}`;
 
     function loadNotes() {
-        const stored = localStorage.getItem('notes');
+        const stored = localStorage.getItem(notesKey);
         const notes = stored ? JSON.parse(stored) : [];
         notesList.innerHTML = '';
         notes.forEach((note, index) => {
@@ -14,10 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function saveNote(title, content) {
-        const stored = localStorage.getItem('notes');
+        const stored = localStorage.getItem(notesKey);
         const notes = stored ? JSON.parse(stored) : [];
         notes.push({ title, content });
-        localStorage.setItem('notes', JSON.stringify(notes));
+        localStorage.setItem(notesKey, JSON.stringify(notes));
         loadNotes();
     }
 
@@ -32,12 +34,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     loadNotes();
-
-    // Add wave transition on page load
-    const wave = document.createElement('div');
-    wave.className = 'wave-transition';
-    document.body.appendChild(wave);
-    setTimeout(() => {
-        wave.remove();
-    }, 1500);
 });

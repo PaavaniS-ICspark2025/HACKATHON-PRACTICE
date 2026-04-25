@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Notes Organizer</title>
+    <title>About - Work Notes</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,24 +12,50 @@
         <nav>
             <a href="index.html">Home</a>
             <a href="notes.html">My Notes</a>
-            <a href="about.html">About</a>
-            <a href="priorities.html">Priorities</a>
-            <a href="contact.html">Contact</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">More Features</a>
+                <div class="dropdown-content">
+                    <a href="wordle.html">Wordle</a>
+                    <a href="sudoku.html">Sudoku</a>
+                    <a href="songs.html">Songs</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Work</a>
+                <div class="dropdown-content">
+                    <a href="calendar.html">Calendar</a>
+                    <a href="priorities.html">Priorities</a>
+                    <a href="contact.html">Contacts</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Help</a>
+                <div class="dropdown-content">
+                    <a href="about.html">About</a>
+                    <a href="settings.html">Settings</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
         </nav>
     </header>
-    <section id="quick-note">
-        <h2>Quick Note</h2>
-        <textarea id="quick-text" rows="4" placeholder="Type something..."></textarea>
-        <p><small>Your quick note is saved automatically in your browser.</small></p>
-    </section>
     <main>
         <section>
-            <h2>Purpose</h2>
-            <p>This project is a simple note-taking website used during a hackathon practice session. It demonstrates basic HTML, CSS, and JavaScript.</p>
+            <h2>How to Use This Website</h2>
+            <p>Work Notes is built to help you stay organized during busy study sessions, projects, school work or office tasks. Start on the Home page to get an overview, then use each section based on what you need to plan.</p>
+            <ol>
+                <li><strong>Open My Notes</strong> to write and save ideas, reminders, and research.</li>
+                <li><strong>Use Priorities</strong> to list your most important tasks and focus on what should be done first.</li>
+                <li><strong>Visit Settings</strong> to adjust your experience if options are available.</li>
+                <li><strong>Use Contact</strong> if you need support or want to share feedback.</li>
+            </ol>
+        </section>
+        <section>
+            <h2>Why It Is Important</h2>
+            <p>Good organization reduces stress, saves time, and helps you make better decisions. This website keeps your notes and priorities in one place so you can quickly capture ideas, track what matters most, and stay productive. During fast-paced environments like study sessions, projects, school work, or office tasks, having a simple system like this can improve both your focus and your results.</p>
         </section>
     </main>
     <footer>
-        <p>&copy; 2026 Notes Organizer</p>
+        <p>&copy; 2026 Work Notes</p>
     </footer>
     <script src="main.js" defer></script>
 </body>
