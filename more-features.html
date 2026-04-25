@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>More Features - Work Notes</title>
+    <title>Reflections - Work Notes</title>
     <link rel="stylesheet" href="styles.css">
     <script src="main.js" defer></script>
 </head>
 <body>
     <header>
-        <h1>More Features</h1>
+        <h1>Reflections</h1>
         <nav>
             <a href="index.html">Home</a>
             <a href="notes.html">My Notes</a>
@@ -19,6 +19,7 @@
                     <a href="wordle.html">Wordle</a>
                     <a href="sudoku.html">Sudoku</a>
                     <a href="songs.html">Songs</a>
+                    <a href="more-features.html#reflections-section">Reflections</a>
                 </div>
             </div>
             <div class="dropdown">
@@ -40,16 +41,33 @@
         </nav>
     </header>
     <main>
-        <section>
-            <h2>More Features</h2>
-            <p>Discover the extra tools available in Work Notes.</p>
-            <ul>
-                <li>Quick Note autosave while you browse pages.</li>
-                <li>Priority planning with deadlines and importance levels.</li>
-                <li>Timezone comparisons for global scheduling.</li>
-                <li>Theme customization options in Settings.</li>
-                <li>Contact storage for people you work with.</li>
-            </ul>
+        <section id="reflections-section">
+            <h2>Reflections</h2>
+            <p>Track your mood and write what you did each day. You can only add one entry per day, but you can edit older entries anytime.</p>
+            <p id="reflections-streak" aria-live="polite">Flame streak: 0 days</p>
+
+            <form id="reflections-form">
+                <label>How are you feeling today?</label>
+                <div class="reflection-mood-grid" role="group" aria-label="Select your feeling">
+                    <button type="button" class="reflection-mood-option" data-mood="happy" aria-pressed="false" title="Happy">😀</button>
+                    <button type="button" class="reflection-mood-option" data-mood="neutral" aria-pressed="false" title="Neutral">😐</button>
+                    <button type="button" class="reflection-mood-option" data-mood="sad" aria-pressed="false" title="Sad">😢</button>
+                    <button type="button" class="reflection-mood-option" data-mood="mad" aria-pressed="false" title="Mad">😠</button>
+                </div>
+                <input type="hidden" id="reflection-mood" value="">
+
+                <label for="reflection-summary">What did you do today?</label>
+                <textarea id="reflection-summary" rows="4" maxlength="1200" placeholder="Write your reflection for the day..." required></textarea>
+
+                <div class="reflection-actions">
+                    <button type="submit" id="reflection-save">Save Reflection</button>
+                    <button type="button" id="reflection-cancel" hidden>Cancel Edit</button>
+                </div>
+                <p id="reflections-status" aria-live="polite"></p>
+            </form>
+
+            <h3>Your Entries</h3>
+            <ul id="reflections-history"></ul>
         </section>
     </main>
     <footer>

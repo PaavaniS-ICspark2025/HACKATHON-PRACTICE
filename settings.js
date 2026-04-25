@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const alarmSoundSelect = document.getElementById('alarm-sound');
     const testAlarmButton = document.getElementById('test-settings-alarm');
     const layoutForm = document.getElementById('layout-form');
+    const fontSizeForm = document.getElementById('font-size-form');
+    const fontSizeScaleInput = document.getElementById('font-size-scale');
+    const fontSizeValue = document.getElementById('font-size-value');
     const customThemeForm = document.getElementById('custom-theme-form');
     const customBgStart = document.getElementById('custom-bg-start');
     const customBgEnd = document.getElementById('custom-bg-end');
@@ -16,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const customThemePaletteKey = `customThemePalette::${profileId}`;
     const alarmSoundKey = `alarmSound::${profileId}`;
     const layoutModeKey = `layoutMode::${profileId}`;
+    const fontSizeScaleKey = `fontSizeScale::${profileId}`;
 
     if (!themeForm) {
         return;
@@ -239,6 +243,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    if (fontSizeScaleInput && fontSizeValue) {
+        const savedFontSize = localStorage.getItem(fontSizeScaleKey) || '100';
+        const safeFontSize = typeof window.applyFontSize === 'function'
+            ? window.applyFontSize(savedFontSize)
+            : Number(savedFontSize);
+        const shownSize = Number.isFinite(safeFontSize) ? safeFontSize : 100;
+
+        fontSizeScaleInput.value = String(shownSize);
+        fontSizeValue.textContent = `${shownSize}%`;
+
+        fontSizeScaleInput.addEventListener('input', () => {
+            const liveSize = typeof window.applyFontSize === 'function'
+                ? window.applyFontSize(fontSizeScaleInput.value)
+                : Number(fontSizeScaleInput.value);
+            const safeLiveSize = Number.isFinite(liveSize) ? liveSize : 100;
+            fontSizeValue.textContent = `${safeLiveSize}%`;
+        });
+    }
+
     themeForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
@@ -295,6 +318,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof window.applyLayoutMode === 'function') {
                 window.applyLayoutMode(selectedLayoutMode);
             }
+        });
+    }
+
+    if (fontSizeForm && fontSizeScaleInput && fontSizeValue) {
+        fontSizeForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const selectedScale = typeof window.applyFontSize === 'function'
+                ? window.applyFontSize(fontSizeScaleInput.value)
+                : Number(fontSizeScaleInput.value);
+            const safeSelectedScale = Number.isFinite(selectedScale) ? selectedScale : 100;
+
+            localStorage.setItem(fontSizeScaleKey, String(safeSelectedScale));
+            fontSizeScaleInput.value = String(safeSelectedScale);
+            fontSizeValue.textContent = `${safeSelectedScale}%`;
         });
     }
 

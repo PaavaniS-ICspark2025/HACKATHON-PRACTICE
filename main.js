@@ -420,10 +420,27 @@ function applySavedLayoutMode() {
     return applyLayoutMode(savedLayoutMode);
 }
 
+function applyFontSize(scalePercent) {
+    const numeric = Number(scalePercent);
+    const safePercent = Number.isFinite(numeric)
+        ? Math.min(140, Math.max(90, Math.round(numeric / 5) * 5))
+        : 100;
+
+    document.documentElement.style.setProperty('--base-font-size', `${safePercent}%`);
+    return safePercent;
+}
+
+function applySavedFontSize() {
+    const savedScale = localStorage.getItem(getScopedStorageKey('fontSizeScale')) || '100';
+    return applyFontSize(savedScale);
+}
+
 window.applyTheme = applyTheme;
 window.applySavedTheme = applySavedTheme;
 window.applyLayoutMode = applyLayoutMode;
 window.applySavedLayoutMode = applySavedLayoutMode;
+window.applyFontSize = applyFontSize;
+window.applySavedFontSize = applySavedFontSize;
 
 const profilesStorageKey = 'workNotesProfiles';
 const activeProfileSessionKey = 'workNotesActiveProfileId';
@@ -1089,11 +1106,338 @@ function initializeProfileAuth() {
     return { isAuthenticated: false, profile: null };
 }
 
+function initializeReflections() {
+    const form = document.getElementById('reflections-form');
+    const moodInput = document.getElementById('reflection-mood');
+    const moodButtons = Array.from(document.querySelectorAll('.reflection-mood-option'));
+    const summaryInput = document.getElementById('reflection-summary');
+    const status = document.getElementById('reflections-status');
+    const history = document.getElementById('reflections-history');
+    const streak = document.getElementById('reflections-streak');
+    const saveButton = document.getElementById('reflection-save');
+    const cancelButton = document.getElementById('reflection-cancel');
+
+    if (!form || !moodInput || !moodButtons.length || !summaryInput || !status || !history || !streak || !saveButton || !cancelButton) {
+        return;
+    }
+
+    const reflectionsKey = getScopedStorageKey('dailyReflections');
+    let editingDate = null;
+
+    function getLocalDateKey(date = new Date()) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function toDisplayDate(dateKey) {
+        const [year, month, day] = dateKey.split('-').map((value) => Number(value));
+        if (!year || !month || !day) {
+            return dateKey;
+        }
+
+        const date = new Date(year, month - 1, day);
+        return date.toLocaleDateString(undefined, {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    }
+
+    function getPreviousDateKey(dateKey) {
+        const [year, month, day] = dateKey.split('-').map((value) => Number(value));
+        const date = new Date(year, month - 1, day);
+        date.setDate(date.getDate() - 1);
+        return getLocalDateKey(date);
+    }
+
+    function readEntries() {
+        const stored = localStorage.getItem(reflectionsKey);
+        if (!stored) {
+            return [];
+        }
+
+        try {
+            const parsed = JSON.parse(stored);
+            if (!Array.isArray(parsed)) {
+                return [];
+            }
+
+            return parsed
+                .filter((entry) => entry
+                    && typeof entry.date === 'string'
+                    && /^\d{4}-\d{2}-\d{2}$/.test(entry.date)
+                    && typeof entry.mood === 'string'
+                    && typeof entry.summary === 'string')
+                .map((entry) => ({
+                    date: entry.date,
+                    mood: entry.mood,
+                    summary: entry.summary,
+                    updatedAt: typeof entry.updatedAt === 'string' ? entry.updatedAt : null,
+                    createdAt: typeof entry.createdAt === 'string' ? entry.createdAt : null
+                }));
+        } catch {
+            return [];
+        }
+    }
+
+    function saveEntries(entries) {
+        const sorted = [...entries].sort((a, b) => b.date.localeCompare(a.date));
+        localStorage.setItem(reflectionsKey, JSON.stringify(sorted));
+    }
+
+    function getMoodLabel(mood) {
+        const labels = {
+            happy: 'Happy',
+            neutral: 'Neutral',
+            sad: 'Sad',
+            mad: 'Mad'
+        };
+        return labels[mood] || 'Unknown';
+    }
+
+    function getMoodFace(mood) {
+        const faces = {
+            happy: '😀',
+            neutral: '😐',
+            sad: '😢',
+            mad: '😠'
+        };
+        return faces[mood] || '🙂';
+    }
+
+    function getCurrentStreak(entries) {
+        const dates = new Set(entries.map((entry) => entry.date));
+        let streakCount = 0;
+        let cursor = getLocalDateKey();
+
+        while (dates.has(cursor)) {
+            streakCount += 1;
+            cursor = getPreviousDateKey(cursor);
+        }
+
+        return streakCount;
+    }
+
+    function setStatus(message, isError = false) {
+        status.textContent = message;
+        status.classList.toggle('is-error', isError);
+    }
+
+    function selectMood(mood) {
+        moodInput.value = mood;
+        moodButtons.forEach((button) => {
+            const isSelected = button.dataset.mood === mood;
+            button.classList.toggle('is-selected', isSelected);
+            button.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+        });
+    }
+
+    moodButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const mood = button.dataset.mood || '';
+            selectMood(mood);
+        });
+    });
+
+    function resetForm() {
+        editingDate = null;
+        form.reset();
+        selectMood('');
+        saveButton.textContent = 'Save Reflection';
+        cancelButton.hidden = true;
+    }
+
+    function startEdit(entry) {
+        editingDate = entry.date;
+        selectMood(entry.mood);
+        summaryInput.value = entry.summary;
+        saveButton.textContent = `Update ${toDisplayDate(entry.date)}`;
+        cancelButton.hidden = false;
+        setStatus(`Editing ${toDisplayDate(entry.date)}.`, false);
+        summaryInput.focus();
+    }
+
+    function renderEntries() {
+        const entries = readEntries().sort((a, b) => b.date.localeCompare(a.date));
+        const streakCount = getCurrentStreak(entries);
+        streak.textContent = `🔥 Flame streak: ${streakCount} ${streakCount === 1 ? 'day' : 'days'}`;
+
+        history.innerHTML = '';
+
+        if (!entries.length) {
+            const empty = document.createElement('li');
+            empty.className = 'reflections-empty';
+            empty.textContent = 'No reflections yet. Add your first one today.';
+            history.appendChild(empty);
+            return;
+        }
+
+        entries.forEach((entry) => {
+            const item = document.createElement('li');
+
+            const topRow = document.createElement('div');
+            topRow.className = 'reflection-meta';
+
+            const moodText = document.createElement('strong');
+            moodText.textContent = `${getMoodFace(entry.mood)} ${getMoodLabel(entry.mood)}`;
+
+            const dateText = document.createElement('span');
+            dateText.textContent = toDisplayDate(entry.date);
+
+            topRow.appendChild(moodText);
+            topRow.appendChild(dateText);
+
+            const summary = document.createElement('p');
+            summary.textContent = entry.summary;
+
+            const editButton = document.createElement('button');
+            editButton.type = 'button';
+            editButton.textContent = 'Edit';
+            editButton.addEventListener('click', () => {
+                startEdit(entry);
+            });
+
+            item.appendChild(topRow);
+            item.appendChild(summary);
+            item.appendChild(editButton);
+            history.appendChild(item);
+        });
+    }
+
+    cancelButton.addEventListener('click', () => {
+        resetForm();
+        setStatus('Edit canceled.');
+    });
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const mood = moodInput.value.trim().toLowerCase();
+        const summary = summaryInput.value.trim();
+        const allowedMoods = new Set(['happy', 'neutral', 'sad', 'mad']);
+
+        if (!allowedMoods.has(mood)) {
+            setStatus('Please click one emoji to choose your mood.', true);
+            return;
+        }
+
+        if (!summary) {
+            setStatus('Please write what you did today.', true);
+            return;
+        }
+
+        const entries = readEntries();
+        const today = getLocalDateKey();
+
+        if (!editingDate) {
+            const hasTodayEntry = entries.some((entry) => entry.date === today);
+            if (hasTodayEntry) {
+                const todayEntry = entries.find((entry) => entry.date === today);
+                if (todayEntry) {
+                    startEdit(todayEntry);
+                }
+                setStatus('You already have a reflection for today. You can edit it instead.', true);
+                return;
+            }
+
+            entries.push({
+                date: today,
+                mood,
+                summary,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            });
+            saveEntries(entries);
+            resetForm();
+            renderEntries();
+            setStatus('Reflection saved for today.');
+            return;
+        }
+
+        const index = entries.findIndex((entry) => entry.date === editingDate);
+        if (index === -1) {
+            resetForm();
+            renderEntries();
+            setStatus('That entry no longer exists. Please try again.', true);
+            return;
+        }
+
+        entries[index] = {
+            ...entries[index],
+            mood,
+            summary,
+            updatedAt: new Date().toISOString()
+        };
+
+        saveEntries(entries);
+        const updatedDate = editingDate;
+        resetForm();
+        renderEntries();
+        setStatus(`Updated reflection for ${toDisplayDate(updatedDate)}.`);
+    });
+
+    renderEntries();
+}
+
+function getCurrentPageName() {
+    const path = window.location.pathname || '';
+    const page = path.split('/').pop() || 'index.html';
+    return page;
+}
+
+function isSafeResumeTarget(target) {
+    return typeof target === 'string' && /^[a-z0-9-]+\.html(?:#[a-z0-9_-]+)?$/i.test(target);
+}
+
+function trackLastVisitedPage() {
+    const page = getCurrentPageName();
+    if (!page || page === 'index.html' || page === 'persistent-player.html') {
+        return;
+    }
+
+    const hash = window.location.hash || '';
+    const target = `${page}${hash}`;
+    localStorage.setItem(getScopedStorageKey('lastVisitedPage'), target);
+}
+
+function initializeHomeWelcome(profile) {
+    const heading = document.getElementById('home-welcome-heading');
+    const resumeButton = document.getElementById('home-resume-button');
+
+    if (!heading || !resumeButton) {
+        return;
+    }
+
+    if (profile && typeof profile.name === 'string' && profile.name.trim()) {
+        heading.textContent = `Welcome, ${profile.name.trim()}!`;
+    }
+
+    const savedTarget = localStorage.getItem(getScopedStorageKey('lastVisitedPage'));
+    const page = getCurrentPageName();
+
+    if (!savedTarget || !isSafeResumeTarget(savedTarget) || savedTarget.startsWith('index.html') || page !== 'index.html') {
+        resumeButton.hidden = true;
+        return;
+    }
+
+    resumeButton.hidden = false;
+    resumeButton.addEventListener('click', () => {
+        window.location.href = savedTarget;
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     applySavedTheme();
+    applySavedFontSize();
     applySavedLayoutMode();
-    initializeProfileAuth();
+    const authState = initializeProfileAuth();
+    initializeHomeWelcome(authState.profile);
+    trackLastVisitedPage();
     initializeMiniSongPlayer();
+    initializeReflections();
 
     const dropdowns = Array.from(document.querySelectorAll('.dropdown'));
     if (dropdowns.length) {

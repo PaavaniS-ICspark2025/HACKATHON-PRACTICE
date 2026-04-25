@@ -20,6 +20,7 @@
                     <a href="wordle.html">Wordle</a>
                     <a href="sudoku.html">Sudoku</a>
                     <a href="songs.html">Songs</a>
+                    <a href="more-features.html#reflections-section">Reflections</a>
                 </div>
             </div>
             <div class="dropdown">
@@ -51,6 +52,37 @@
                 <button id="calendar-next" type="button">Next</button>
             </div>
             <div id="calendar-grid" aria-label="Monthly calendar"></div>
+
+            <h3>Add Calendar Plan</h3>
+            <form id="calendar-event-form">
+                <label for="calendar-event-date">Date</label>
+                <input id="calendar-event-date" type="date" required>
+
+                <label for="calendar-event-what">What</label>
+                <input id="calendar-event-what" type="text" maxlength="140" placeholder="Project kickoff meeting" required>
+
+                <label for="calendar-event-when">When</label>
+                <input id="calendar-event-when" type="text" maxlength="120" placeholder="10:30 AM - 11:15 AM" required>
+
+                <label for="calendar-event-where">Where</label>
+                <input id="calendar-event-where" type="text" maxlength="140" placeholder="Conference Room A" required>
+
+                <label for="calendar-event-urgency">Urgency / Priority</label>
+                <select id="calendar-event-urgency" required>
+                    <option value="">Select urgency</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="critical">Critical</option>
+                </select>
+
+                <div class="calendar-event-actions">
+                    <button type="submit" id="calendar-event-save">Save Plan</button>
+                    <button type="button" id="calendar-event-cancel" hidden>Cancel Edit</button>
+                    <button type="button" id="calendar-event-delete" hidden>Delete Plan</button>
+                </div>
+                <p id="calendar-event-status" aria-live="polite"></p>
+            </form>
         </section>
     </main>
 </body>

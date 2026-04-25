@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
 
 :root {
+    --base-font-size: 100%;
     --bg-color: #f3f6fa;
     --page-glow: rgba(255, 255, 255, 0.55);
     --bg-gradient-start: #f8fafd;
@@ -50,6 +51,7 @@ body {
 }
 
 html {
+    font-size: var(--base-font-size);
     scroll-behavior: smooth;
 }
 
@@ -403,6 +405,10 @@ button:active {
     box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.2);
 }
 
+#home-resume-button {
+    margin-top: 0.9rem;
+}
+
 #new-note,
 #new-priority {
     display: grid;
@@ -433,6 +439,125 @@ button:active {
     padding: 0;
     list-style: none;
     border-radius: var(--radius-md);
+}
+
+#reflections-streak {
+    margin-top: 0.55rem;
+    margin-bottom: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.34rem 0.62rem;
+    border-radius: 999px;
+    border: 1px solid var(--item-border);
+    background: var(--item-bg);
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+#reflections-form {
+    display: grid;
+    gap: 0.18rem;
+    margin-top: 0.4rem;
+}
+
+.reflection-mood-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.35rem 0 0.75rem;
+}
+
+.reflection-mood-option {
+    width: 74px;
+    height: 74px;
+    padding: 0;
+    border-radius: 12px;
+    border: 1px solid var(--field-border);
+    background: var(--field-bg);
+    color: var(--text-color);
+    display: grid;
+    place-items: center;
+    font-size: 2.15rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.reflection-mood-option:hover {
+    transform: translateY(-1px);
+}
+
+.reflection-mood-option:focus-visible {
+    outline: none;
+    border-color: var(--button-bg);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.reflection-mood-option.is-selected {
+    border-color: var(--button-bg);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+    background: var(--item-bg);
+}
+
+.reflection-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.15rem;
+}
+
+#reflections-status {
+    min-height: 1.3rem;
+    margin-top: 0.3rem;
+    margin-bottom: 0.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+#reflections-status.is-error {
+    color: #b91c1c;
+}
+
+#reflections-history {
+    margin: 0.65rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+#reflections-history li {
+    margin-bottom: 0.65rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--item-border);
+    padding: 0.82rem 0.9rem;
+    background: var(--item-bg);
+    color: var(--text-color);
+    display: grid;
+    gap: 0.42rem;
+    border-left: 4px solid rgba(21, 95, 160, 0.28);
+}
+
+#reflections-history li button {
+    width: fit-content;
+    padding: 0.4rem 0.72rem;
+    font-size: 0.9rem;
+}
+
+.reflection-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 0.6rem;
+}
+
+.reflection-meta span {
+    color: var(--muted-text-color);
+    font-size: 0.92rem;
+}
+
+.reflections-empty {
+    color: var(--muted-text-color);
+    padding: 0.7rem 0.2rem;
 }
 
 #note-list li,
@@ -719,16 +844,59 @@ button:active {
     display: grid;
     grid-template-columns: repeat(7, minmax(40px, 1fr));
     gap: 0.42rem;
+    margin-bottom: 0.9rem;
 }
 
 .calendar-cell {
     border: 1px solid var(--item-border);
     border-radius: 8px;
     min-height: 42px;
-    display: grid;
-    place-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.3rem;
     background: var(--item-bg);
     font-weight: 600;
+}
+
+.calendar-day-number {
+    line-height: 1;
+}
+
+.calendar-day-marker {
+    font-size: 0.7rem;
+    line-height: 1.15;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    padding: 0.08rem 0.38rem;
+    color: #ffffff;
+    background: #475569;
+}
+
+.calendar-clickable {
+    cursor: pointer;
+}
+
+.calendar-clickable:hover {
+    border-color: var(--button-bg);
+}
+
+.calendar-clickable:focus-visible {
+    outline: none;
+    border-color: var(--button-bg);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.calendar-selected {
+    border-color: var(--button-bg);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+    background: linear-gradient(180deg, var(--item-bg), rgba(255, 255, 255, 0.95));
+}
+
+.calendar-selected .calendar-day-number {
+    font-weight: 800;
 }
 
 .calendar-weekday {
@@ -747,6 +915,102 @@ button:active {
 .calendar-today {
     border-color: var(--button-bg);
     box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+#calendar-event-form {
+    display: grid;
+    gap: 0.15rem;
+    margin-top: 0.35rem;
+}
+
+.calendar-event-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.15rem;
+}
+
+#calendar-event-status {
+    min-height: 1.25rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+#calendar-event-status.is-error {
+    color: #b91c1c;
+}
+
+#calendar-event-list {
+    list-style: none;
+    margin: 0.6rem 0 0;
+    padding: 0;
+}
+
+.calendar-event-item {
+    margin-bottom: 0.65rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--item-border);
+    padding: 0.82rem 0.9rem;
+    background: var(--item-bg);
+    display: grid;
+    gap: 0.4rem;
+    border-left: 4px solid rgba(21, 95, 160, 0.28);
+}
+
+.calendar-event-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.calendar-urgency-badge {
+    border-radius: 999px;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: #64748b;
+}
+
+.calendar-urgency-badge.urgency-low,
+.calendar-day-marker.urgency-low {
+    background: #0f766e;
+}
+
+.calendar-urgency-badge.urgency-medium,
+.calendar-day-marker.urgency-medium {
+    background: #0369a1;
+}
+
+.calendar-urgency-badge.urgency-high,
+.calendar-day-marker.urgency-high {
+    background: #b45309;
+}
+
+.calendar-urgency-badge.urgency-critical,
+.calendar-day-marker.urgency-critical {
+    background: #b91c1c;
+}
+
+.calendar-event-item p {
+    margin: 0;
+}
+
+.calendar-event-item-actions {
+    display: flex;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+}
+
+.calendar-event-item-actions button {
+    margin: 0;
+}
+
+.calendar-event-empty {
+    color: var(--muted-text-color);
+    padding: 0.45rem 0.1rem;
 }
 
 #songs-player h3 {
